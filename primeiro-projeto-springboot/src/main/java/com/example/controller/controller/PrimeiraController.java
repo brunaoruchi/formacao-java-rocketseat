@@ -1,5 +1,7 @@
 package com.example.controller.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -36,6 +38,17 @@ public class PrimeiraController {
     @PostMapping("/metodoComListHeaders")
     public String metodoComListHeaders(@RequestHeader Map<String, String> headers){
         return "metodoComListHeaders " + headers.entrySet();
+    }
+
+    @GetMapping("/metodoResponseEntity/{id}")
+    public ResponseEntity<Object> metodoResponseEntity(@PathVariable Long id){
+//        return ResponseEntity.status(400).body("Mensagem de erro");
+//        return ResponseEntity.status(HttpStatus.CREATED).body("Mensagem de 201");
+        var usuario = new Usuario("brunaoruchi");
+        if(id > 5){
+            return ResponseEntity.status(HttpStatus.OK).body(usuario);
+        }
+        return ResponseEntity.badRequest().body("Número menor que cinco");
     }
 
     record Usuario(String username){}
