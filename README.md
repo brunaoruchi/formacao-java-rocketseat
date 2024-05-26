@@ -1,1 +1,1 @@
-# formacao-java-rocketseat-b
+# formacao-java-rocketseat
