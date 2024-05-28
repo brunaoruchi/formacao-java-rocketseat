@@ -6,6 +6,7 @@
       <list>
         <option value="$PROJECT_DIR$/fundamentos_java/pom.xml" />
         <option value="$PROJECT_DIR$/primeiro-projeto-springboot/pom.xml" />
+        <option value="$PROJECT_DIR$/gestao_vagas/pom.xml" />
       </list>
     </option>
   </component>

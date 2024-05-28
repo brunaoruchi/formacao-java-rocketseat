@@ -8,11 +8,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="fundamentos_java" />
         <module name="primeiro-projeto-springboot" />
+        <module name="gestao_vagas" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="gestao_vagas" options="-parameters" />
       <module name="primeiro-projeto-springboot" options="-parameters" />
     </option>
   </component>
