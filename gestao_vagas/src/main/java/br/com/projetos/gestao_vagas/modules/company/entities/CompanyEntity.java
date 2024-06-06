@@ -18,7 +18,7 @@ import java.util.UUID;
 @Data
 public class CompanyEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @NotBlank()
