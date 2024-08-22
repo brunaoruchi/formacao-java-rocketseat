@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
+import java.time.Duration;
+import java.time.Instant;
 
 @Service
 public class AuthCompanyUseCase {
@@ -30,16 +32,17 @@ public class AuthCompanyUseCase {
                 }
         );
         //Verificar a senha está correta
-        //Se não for: Erro. Se for: Gerar token
+        //Se não for: Erro.
         var passwordMatches = this.passwordEncoder.matches(authCompanyDTO.getPassword(), company.getPassword());
 
         if (!passwordMatches) {
             throw new AuthenticationException("Username/password incorrect");
         }
-
+        //Se for: Gerar token
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         var token = JWT.create().withIssuer("javagas")
+                .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
                 .withSubject(company.getId().toString()).sign(algorithm);
 
         return token;
