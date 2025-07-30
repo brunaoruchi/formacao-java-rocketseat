@@ -1,6 +1,8 @@
 package br.com.projetos.gestao_vagas.modules.company.controllers;
 
 import br.com.projetos.gestao_vagas.modules.company.dto.CreateJobDTO;
+import br.com.projetos.gestao_vagas.modules.company.entities.CompanyEntity;
+import br.com.projetos.gestao_vagas.modules.company.repositories.CompanyRepository;
 import br.com.projetos.gestao_vagas.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,12 +23,16 @@ import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 public class CreateJobControllerTest {
 
     private MockMvc mvc;
 
     @Autowired
     private WebApplicationContext context;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Before
     public void setUp() {
@@ -38,6 +44,15 @@ public class CreateJobControllerTest {
     @Test
     public void should_be_able_to_create_a_new_job() throws Exception {
 
+        var company = CompanyEntity.builder()
+                .description("Empresa de tecnologia")
+                .email("email@company.com")
+                .password("1234567890")
+                .username("teste")
+                .name("Teste").build();
+
+        company = companyRepository.saveAndFlush(company);
+
         var createdJobDTO = CreateJobDTO.builder()
                 .description("Vaga para pessoa desenvolvedora júnior")
                 .benefits("Gympass e Plano de saúde")
@@ -47,7 +62,7 @@ public class CreateJobControllerTest {
         var result = mvc.perform(MockMvcRequestBuilders.post("/company/job/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(TestUtils.objectToJson(createdJobDTO))
-                        .header("Authorization", TestUtils.generateToken(UUID.fromString("371dc184-15cc-40f4-8911-ff4288809328"), "JAVAGAS_@852#"))
+                        .header("Authorization", TestUtils.generateToken(company.getId(), "JAVAGAS_@852#"))
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
