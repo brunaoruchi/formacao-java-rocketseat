@@ -1,5 +1,7 @@
 package br.com.projetos.gestao_vagas.modules.company.controllers;
 
+import br.com.projetos.gestao_vagas.exceptions.CompanyNotFoundException;
+import br.com.projetos.gestao_vagas.exceptions.JobNotFoundException;
 import br.com.projetos.gestao_vagas.modules.company.dto.CreateJobDTO;
 import br.com.projetos.gestao_vagas.modules.company.entities.CompanyEntity;
 import br.com.projetos.gestao_vagas.modules.company.repositories.CompanyRepository;
@@ -20,6 +22,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -67,6 +71,25 @@ public class CreateJobControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         System.out.println(result);
+    }
+
+    @Test
+    public void should_not_be_able_to_create_a_new_job_if_company_not_found() throws Exception {
+        var createdJobDTO = CreateJobDTO.builder()
+                .description("Vaga para pessoa desenvolvedora júnior")
+                .benefits("Gympass e Plano de saúde")
+                .level("JUNIOR")
+                .build();
+
+        try{
+            mvc.perform(MockMvcRequestBuilders.post("/company/job/")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(TestUtils.objectToJson(createdJobDTO))
+                            .header("Authorization", TestUtils.generateToken(UUID.randomUUID(), "JAVAGAS_@852#"))
+                    );
+        } catch (Exception e) {
+            assertThat(e).isInstanceOf(CompanyNotFoundException.class);
+        }
     }
 
 }
