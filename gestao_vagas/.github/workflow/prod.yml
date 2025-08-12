@@ -2,7 +2,9 @@ name: Gestao de Vagas Application
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - gestao-vagas/implantacao-monitoramento
 
 jobs:
   build:
